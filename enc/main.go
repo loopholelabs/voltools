@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 )
 
 const MAX_ZEROS = 32
@@ -59,8 +60,12 @@ func flush() {
 
 func main() {
 	fname := os.Args[1]
+	gigs, err := strconv.ParseInt(os.Args[2], 10, 32)
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Printf("\n// Processing %s...\n", fname)
+	fmt.Printf("\n// Processing %s which is %d gigs...\n", fname, gigs)
 
 	data = make([]byte, 0)
 	dataloc = 0
@@ -75,7 +80,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf(" var FS_%s = FileData{size:%d, data:[]DataAt{", fname, stat.Size())
+	fmt.Printf(" allFileData[%d] = fileData{size:%d, data:[]dataAt{", gigs, stat.Size())
 
 	location := 0
 

@@ -3,22 +3,28 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 )
 
-type FileData struct {
+type fileData struct {
 	size int64
-	data []DataAt
+	data []dataAt
 }
 
-type DataAt struct {
+type dataAt struct {
 	loc  int64
 	data []byte
 }
 
+func CreateFile(gigs int, file string) error {
+	data, ok := allFileData[gigs]
+	if !ok {
+		return fmt.Errorf("Filesize %dg is not supported.", gigs)
+	}
+	return createFile(data, file)
+}
+
 // Create a file from data
-func CreateFile(data FileData, file string) error {
-	ctime := time.Now()
+func createFile(data fileData, file string) error {
 	f, err := os.Create(file)
 	if err != nil {
 		return err
@@ -29,18 +35,12 @@ func CreateFile(data FileData, file string) error {
 		return err
 	}
 
-	writes := 0
-	dataWritten := 0
 	for _, d := range data.data {
-		n, err := f.WriteAt(d.data, d.loc)
-		if n != len(d.data) || err != nil {
+		_, err := f.WriteAt(d.data, d.loc)
+		if err != nil {
 			return err
 		}
-		writes++
-		dataWritten += len(d.data)
 	}
-	f.Close()
 
-	fmt.Printf("Filesystem %s size %d created in %d ms (%d writes, %d bytes)\n", file, data.size, time.Since(ctime).Milliseconds(), writes, dataWritten)
-	return nil
+	return f.Close()
 }

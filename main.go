@@ -4,6 +4,12 @@ import (
 	"fmt"
 )
 
+// Create a new volume
+
 func main() {
-	CreateFile(FS_100g, fmt.Sprintf("100g.volume"))
+	size := 1
+	err := CreateFile(size, fmt.Sprintf("volume.%dg", size))
+	if err != nil {
+		panic(err)
+	}
 }

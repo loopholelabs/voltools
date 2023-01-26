@@ -1,4 +1,4 @@
-module github.com/loopholelabs/ext4.dec
+module github.com/loopholelabs/voltools
 
 go 1.18
 

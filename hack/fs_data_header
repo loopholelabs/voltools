@@ -1,8 +1,4 @@
-package main
+package fsdata
 
-var allFileData map[int]fileData
-
-// Processing 100m...
 func init() {
-	allFileData = make(map[int]fileData)
 

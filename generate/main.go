@@ -11,7 +11,7 @@ import (
 	"text/template"
 )
 
-const MAX_ZEROS = 32
+const MAX_ZEROS = 1024 * 1024
 
 var data []byte
 var dataloc int

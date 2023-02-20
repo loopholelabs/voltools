@@ -2,7 +2,6 @@ package fsdata
 
 import (
 	"errors"
-	"io"
 	"os"
 )
 
@@ -20,8 +19,18 @@ type dataAt struct {
 	data []byte
 }
 
+type formattableFile struct {
+	*os.File
+}
+
+func (f formattableFile) WriteAt(chunk []byte, offset int64) (err error) {
+	_, err = f.File.WriteAt(chunk, offset)
+
+	return
+}
+
 type Formattable interface {
-	io.WriterAt
+	WriteAt(chunk []byte, offset int64) error
 	Truncate(size int64) error
 }
 
@@ -36,8 +45,7 @@ func Format(gigs int, formattable Formattable) error {
 	}
 
 	for _, d := range data.data {
-		_, err := formattable.WriteAt(d.data, d.loc)
-		if err != nil {
+		if err := formattable.WriteAt(d.data, d.loc); err != nil {
 			return err
 		}
 	}
@@ -51,7 +59,7 @@ func CreateFile(gigs int, file string) error {
 		return err
 	}
 
-	if err := Format(gigs, f); err != nil {
+	if err := Format(gigs, &formattableFile{f}); err != nil {
 		return err
 	}
 

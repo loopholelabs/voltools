@@ -8,7 +8,7 @@ import (
 
 // Create a new volume
 func main() {
-	size := flag.Int("size", 10, "Size of the filesystem to create in GB")
+	size := flag.Int("size", 20, "Size of the filesystem to create in GB")
 	output := flag.String("output", "fs.img", "Path to write the filesystem to")
 
 	flag.Parse()

@@ -1,13 +1,8 @@
 package fsdata
 
 import (
-	"errors"
-	"io"
+	"fmt"
 	"os"
-)
-
-var (
-	ErrFilesizeNotSupported = errors.New("filesize not supported")
 )
 
 type fileData struct {
@@ -20,38 +15,31 @@ type dataAt struct {
 	data []byte
 }
 
-func Format(gigs int, file io.WriterAt) error {
-	data, ok := allFileData[gigs]
-	if !ok {
-		return ErrFilesizeNotSupported
-	}
-
-	for _, d := range data.data {
-		if _, err := file.WriteAt(d.data, d.loc); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func CreateFile(gigs int, file string) error {
 	data, ok := allFileData[gigs]
 	if !ok {
-		return ErrFilesizeNotSupported
+		return fmt.Errorf("Filesize %dg is not supported.", gigs)
 	}
+	return createFile(data, file)
+}
 
+// Create a file from data
+func createFile(data fileData, file string) error {
 	f, err := os.Create(file)
 	if err != nil {
 		return err
 	}
 
-	if err := f.Truncate(data.size); err != nil {
+	err = f.Truncate(data.size)
+	if err != nil {
 		return err
 	}
 
-	if err := Format(gigs, f); err != nil {
-		return err
+	for _, d := range data.data {
+		_, err := f.WriteAt(d.data, d.loc)
+		if err != nil {
+			return err
+		}
 	}
 
 	return f.Close()

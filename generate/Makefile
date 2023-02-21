@@ -1,6 +1,6 @@
 OUTPUT_DIR ?= "../fsdata"
 
-obj = $(shell seq 10 10 250)
+obj = $(shell seq 10 10 500)
 
 all: build
 

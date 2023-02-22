@@ -11,8 +11,6 @@ import (
 	"text/template"
 )
 
-const MAX_ZEROS = 1024 * 1024
-
 var data []byte
 var dataloc int
 
@@ -83,6 +81,7 @@ func main() {
 	input := flag.String("input", "", "Input file path")
 	size := flag.Int("size", 0, "Input file size in GB")
 	outputDir := flag.String("output-dir", "out", "Output directory")
+	maxZeros := flag.Int("max-zeros", 1024*1024, "Maximum count of blocks of zeros to include before terminating a section")
 
 	flag.Parse()
 
@@ -123,7 +122,7 @@ func main() {
 				numzeros++
 				addByte(location, b)
 
-				if numzeros > MAX_ZEROS {
+				if numzeros > *maxZeros {
 					loc := flush()
 					if loc > -1 {
 						d.Chunks = append(d.Chunks, loc)

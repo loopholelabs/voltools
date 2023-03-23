@@ -1,16 +1,19 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+
 	"github.com/loopholelabs/voltools/fsdata"
 )
 
 // Create a new volume
-
 func main() {
-	size := 10
-	err := fsdata.CreateFile(size, fmt.Sprintf("volume.%dg", size))
-	if err != nil {
+	size := flag.Int("size", 20, "Size of the filesystem to create in GB")
+	output := flag.String("output", "fs.img", "Path to write the filesystem to")
+
+	flag.Parse()
+
+	if err := fsdata.CreateFile(*size, *output); err != nil {
 		panic(err)
 	}
 }

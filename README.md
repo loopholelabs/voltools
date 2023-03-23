@@ -2,8 +2,8 @@
 
 ## Encoding volumes
 
-The `enc` directory includes simple script to encode volumes.
-The `make.sh` script uses `mkfs.ext4` to create volumes of various sizes, and then encodes them into a small efficient format for recreating.
+The `hack` directory includes Makefile to encode volumes.
+It uses `mkfs.ext4` to create volumes of various sizes, and then encodes them into a small efficient format for recreating.
 
 A variety of sizes has been created already and is available for use in `fs_data.go`. Attempting to create a filesize not encoded will result in an error.
 

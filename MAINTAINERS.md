@@ -1,0 +1,2 @@
+- Jimmy Moore <jimmymoore@loopholelabs.io> @jimmyaxod
+- Felicitas Pojtinger <felicitaspojtinger@loopholelabs.io> @pojntfx

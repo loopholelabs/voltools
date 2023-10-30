@@ -79,13 +79,13 @@ type templateData struct {
 
 func main() {
 	input := flag.String("input", "", "Input file path")
-	size := flag.Int("size", 0, "Input file size in GB")
+	size := flag.Int("size", 0, "Input file size in MB")
 	outputDir := flag.String("output-dir", "out", "Output directory")
 	maxZeros := flag.Int("max-zeros", 1024*1024, "Maximum count of blocks of zeros to include before terminating a section")
 
 	flag.Parse()
 
-	log.Printf("Processing %v (%v GB)", *input, *size)
+	log.Printf("Processing %v (%v MB)", *input, *size)
 
 	data = make([]byte, 0)
 	dataloc = 0

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"sort"
 )
 
 var (
@@ -35,8 +36,8 @@ func Format(gigs int, file io.WriterAt) error {
 	return nil
 }
 
-func CreateFile(gigs int, file string) error {
-	data, ok := allFileData[gigs]
+func CreateFile(mbs int, file string) error {
+	data, ok := allFileData[mbs]
 	if !ok {
 		return ErrFilesizeNotSupported
 	}
@@ -50,9 +51,34 @@ func CreateFile(gigs int, file string) error {
 		return err
 	}
 
-	if err := Format(gigs, f); err != nil {
+	if err := Format(mbs, f); err != nil {
 		return err
 	}
 
 	return f.Close()
+}
+
+func CreateNextLargestFile(mbs int, file string) error {
+	keys := make([]int, 0, len(allFileData))
+	for k := range allFileData {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+
+	// Find the next largest size
+	var nextLargestSize int
+	found := false
+	for _, k := range keys {
+		if k >= mbs {
+			nextLargestSize = k
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return ErrFilesizeNotSupported
+	}
+
+	return CreateFile(nextLargestSize, file)
 }

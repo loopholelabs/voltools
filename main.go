@@ -8,12 +8,12 @@ import (
 
 // Create a new volume
 func main() {
-	size := flag.Int("size", 20, "Size of the filesystem to create in GB")
+	size := flag.Int("size", 20000, "Size of the filesystem to create in MB")
 	output := flag.String("output", "fs.img", "Path to write the filesystem to")
 
 	flag.Parse()
 
-	if err := fsdata.CreateFile(*size, *output); err != nil {
+	if err := fsdata.CreateNextLargestFile(*size, *output); err != nil {
 		panic(err)
 	}
 }
